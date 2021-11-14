@@ -1,1 +1,0 @@
-AJAX = Asynchronous JavaScript and XM
