@@ -1,13 +1,47 @@
 <?php
 
 session_start();
-// $_SESSION['login'];
-// $_COOKIE['login'];
 
-if (!$_SESSION['login'] && !$_COOKIE['login']){
+if (!$_SESSION['login'] && !$_COOKIE['login']) {
     header('location: ../login.php');
 }
 
+
+$servername = "localhost";
+$username = "root";
+$password = "root";
+$dbname = "php-train";
+
+try {
+    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    echo $sql . "<br>" . $e->getMessage();
+}
+
+$stmt = $conn->prepare("SELECT * FROM users WHERE email='" . $_SESSION['email'] . "'");
+$stmt->execute();
+$result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+$result = $stmt->fetchAll();
+
+if (!count($result)) {
+    $_SESSION['login'] = null;
+    setcookie('login', null, time());
+    header('location: ../login.php');
+    die();
+}
+
+if (count($result) > 0) {
+    if (!$result[0]['isAdmin']) {
+        header('location: ../index.php');
+        die();
+    }
+}
+
+// if (!$_SESSION['isAdmin'] && !$_COOKIE['isAdmin']) {
+//     header('location: ../index.php');
+// }
 ?>
 
 <!doctype html>

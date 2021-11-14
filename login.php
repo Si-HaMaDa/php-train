@@ -35,36 +35,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $result = $stmt->fetchAll();
 
             if (count($result) > 0) {
-                $error = true;
+                $error = 'true';
                 $errorMSG = 'Email Already registerd';
             } else {
-                // $sql = "INSERT INTO users (name, email, password) VALUES ('" . $_POST['name'] . "', '" . $_POST['email'] . "', '" . $_POST['password'] . "')";
-                // // use exec() because no results are returned
-                // $conn->exec($sql);
+                $sql = "INSERT INTO users (name, email, password) VALUES ('" . $_POST['name'] . "', '" . $_POST['email'] . "', '" . $_POST['password'] . "')";
+                // use exec() because no results are returned
+                $conn->exec($sql);
 
-                $stmt = $conn->prepare("INSERT INTO users (name, email password) VALUES (?, ?, ?)");
-                $stmt->bind_param("sss", $_POST['name'], $_POST['email'], $_POST['password']);
-                $stmt->execute();
 
                 echo "New record created successfully, You can login NOW";
             }
-            
         } else {
-            $stmt = $conn->prepare("SELECT email, password FROM users WHERE email='" . $_POST['email'] . "' AND password='" . html($_POST['password']) . "'");
-            $stmt = $conn->prepare("SELECT email, password FROM users WHERE email='" . $_POST['email'] . "' AND password='". $_POST['password']. "; DELETE FROM `users` WHERE phone=011;");
-            // SELECT * FROM `users`; DELETE FROM `users` WHERE phone=011;
+
+            $stmt = $conn->prepare("SELECT * FROM users WHERE email='" . $_POST['email'] . "' AND password='" . $_POST['password'] . "'");
             $stmt->execute();
             $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $result = $stmt->fetchAll();
 
             if (count($result) > 0) {
-                if ($_POST['remeber'] == 'on'){
-                    setcookie('login', true, time() + (86400 * 30));
+                if ($result[0]['isAdmin']) {
+                    if ($_POST['remeber'] == 'on') {
+                        setcookie('login', true, time() + (86400 * 30));
+                        setcookie('email', $result[0]['email'], time() + (86400 * 30));
+                    } else {
+                        $_SESSION['login'] = true;
+                        $_SESSION['email'] = $result[0]['email'];
+                    }
+                    header('location: admin/index.php');
+                    die();
                 } else {
-                    $_SESSION['login'] = true;
+                    if ($_POST['remeber'] == 'on') {
+                        setcookie('login', true, time() + (86400 * 30));
+                        setcookie('email', $result[0]['email'], time() + (86400 * 30));
+                    } else {
+                        $_SESSION['login'] = true;
+                        $_SESSION['email'] = $result[0]['email'];
+                    }
+                    header('location: index.php');
+                    die();
                 }
-                header('location: admin/index.php');
-                die();
             } else {
                 $error = true;
             }
