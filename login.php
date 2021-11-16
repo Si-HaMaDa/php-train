@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $error = 'true';
                 $errorMSG = 'Email Already registerd';
             } else {
-                $sql = "INSERT INTO users (name, email, password) VALUES ('" . $_POST['name'] . "', '" . $_POST['email'] . "', '" . $_POST['password'] . "')";
+                $sql = "INSERT INTO users (name, email, password) VALUES ('" . $_POST['name'] . "', '" . $_POST['email'] . "', '" . password_hash($_POST['password'], PASSWORD_DEFAULT) . "')";
                 // use exec() because no results are returned
                 $conn->exec($sql);
 
@@ -47,38 +47,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         } else {
 
-            $stmt = $conn->prepare("SELECT * FROM users WHERE email='" . $_POST['email'] . "' AND password='" . $_POST['password'] . "'");
+            $stmt = $conn->prepare("SELECT * FROM users WHERE email='" . $_POST['email'] . "'");
             $stmt->execute();
             $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $result = $stmt->fetchAll();
 
             if (count($result) > 0) {
-                if ($result[0]['isAdmin']) {
-                    if ($_POST['remeber'] == 'on') {
-                        setcookie('login', true, time() + (86400 * 30));
-                        setcookie('email', $result[0]['email'], time() + (86400 * 30));
+
+                if (password_verify($_POST['password'], $result[0]['password'])) {
+
+                    if ($result[0]['isAdmin']) {
+                        if ($_POST['remeber'] == 'on') {
+                            setcookie('login', true, time() + (86400 * 30));
+                            setcookie('email', $result[0]['email'], time() + (86400 * 30));
+                        } else {
+                            $_SESSION['login'] = true;
+                            $_SESSION['email'] = $result[0]['email'];
+                        }
+                        header('location: admin/index.php');
+                        die();
                     } else {
-                        $_SESSION['login'] = true;
-                        $_SESSION['email'] = $result[0]['email'];
+                        if ($_POST['remeber'] == 'on') {
+                            setcookie('login', true, time() + (86400 * 30));
+                            setcookie('email', $result[0]['email'], time() + (86400 * 30));
+                        } else {
+                            $_SESSION['login'] = true;
+                            $_SESSION['email'] = $result[0]['email'];
+                        }
+                        header('location: index.php');
+                        die();
                     }
-                    header('location: admin/index.php');
-                    die();
                 } else {
-                    if ($_POST['remeber'] == 'on') {
-                        setcookie('login', true, time() + (86400 * 30));
-                        setcookie('email', $result[0]['email'], time() + (86400 * 30));
-                    } else {
-                        $_SESSION['login'] = true;
-                        $_SESSION['email'] = $result[0]['email'];
-                    }
-                    header('location: index.php');
-                    die();
+                    $error = true;
                 }
             } else {
                 $error = true;
             }
             // use exec() because no results are returned
-            var_dump($result);
             echo "New record created successfully";
         }
     } catch (PDOException $e) {

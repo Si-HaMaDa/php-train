@@ -7,6 +7,16 @@ if (!$_SESSION['login'] && !$_COOKIE['login']) {
 }
 
 
+function test_input($data)
+{
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    $data = addslashes($data);
+    // $data = preg_match("/^([a-zA-Z' ]+)$/", $data);
+    return $data;
+}
+
 $servername = "localhost";
 $username = "root";
 $password = "root";
