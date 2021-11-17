@@ -110,7 +110,9 @@ if (count($result) > 0) {
         <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+        <form>
+            <input class="form-control form-control-dark w-100" type="text" placeholder="Search" name="search" aria-label="Search" value="<?= $_GET['search'] ?>">
+        </form>
         <div class="navbar-nav">
             <div class="nav-item text-nowrap">
                 <a class="nav-link px-3" href="../login.php?signout=1">Sign out</a>

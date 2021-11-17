@@ -19,9 +19,8 @@ $stmt = $conn->prepare("SELECT COUNT(*) FROM users");
 $total = $stmt->execute();
 $total = $stmt->fetch()[0];
 
-$totalPages = ceil($total / 10);
-
-$page = $_GET['page'] <= 0 ? '1' : $_GET['page'];
+$totalPages = ceil($total / 10) ? ceil($total / 10) : 1;
+$page = isset($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1;
 $page = $page > $totalPages ? $totalPages : $page;
 $start = ($page - 1) * 10;
 
