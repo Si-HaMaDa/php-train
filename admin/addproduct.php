@@ -76,7 +76,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <div class="form-group m-3">
                 <label for="category">Category name</label>
-                <input type="text" class="form-control" name="category" id="category" placeholder="category name">
+                <select class="form-control" name="category" id="category">
+                    <option value="0">Select Category</option>
+                    <?php
+
+                    $stmt = $conn->prepare("SELECT * FROM categories");
+                    $stmt->execute();
+                    $categories = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+                    $categories = $stmt->fetchAll();
+
+                    foreach ($categories as $category) {
+                        echo '<option value="' . $category['id'] . '">' . $category['name'] . '</option>';
+                    }
+                    ?>
+                </select>
             </div>
             <div class="form-group m-3">
                 <label for="seller">Seller name</label>
