@@ -84,19 +84,6 @@
 
     <main>
 
-        <section class="py-5 text-center container">
-            <div class="row py-lg-5">
-                <div class="col-lg-6 col-md-8 mx-auto">
-                    <h1 class="fw-light">Album example</h1>
-                    <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p>
-                    <p>
-                        <a href="#" class="btn btn-primary my-2">Main call to action</a>
-                        <a href="#" class="btn btn-secondary my-2">Secondary action</a>
-                    </p>
-                </div>
-            </div>
-        </section>
-
         <div class="album py-5 bg-light">
             <div class="container">
 
@@ -115,32 +102,29 @@
                         echo $sql . "<br>" . $e->getMessage();
                     }
 
-                    $stmt = $conn->prepare("SELECT * FROM products");
+                    $stmt = $conn->prepare("SELECT * FROM products WHERE id='" . $_GET['productID'] . "'");
                     $stmt->execute();
                     $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
                     $result = $stmt->fetchAll();
+                    $product = $result[0];
 
-                    foreach ($result as $key => $product) :
                     ?>
-                        <div class="col">
-                            <div class="card shadow-sm">
-                                <img src="admin/<?= $product['image'] ?>" alt="" srcset="">
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <img src="admin/<?= $product['image'] ?>" alt="" srcset="">
 
-                                <div class="card-body">
-                                    <p class="card-text"><?= $product['description'] ?></p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div class="btn-group">
-                                            <a href="product.php?productID=<?= $product['id'] ?>" class="btn btn-sm btn-outline-secondary">View</a>
-                                            <p><?= $product['name'] ?></p>
-                                        </div>
-                                        <a href="category.php?categoryID=<?= $product['category'] ?>">
-                                            <small class="text-muted"><?= $product['category'] ?></small>
-                                        </a>
+                            <div class="card-body">
+                                <p class="card-text"><?= $product['description'] ?></p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <a href="product.php?productID=<?= $product['id'] ?>" class="btn btn-sm btn-outline-secondary">View</a>
+                                        <p><?= $product['name'] ?></p>
                                     </div>
+                                    <small class="text-muted"><?= $product['category'] ?></small>
                                 </div>
                             </div>
                         </div>
-                    <?php endforeach; ?>
+                    </div>
                 </div>
             </div>
         </div>

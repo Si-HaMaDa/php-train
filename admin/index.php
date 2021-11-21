@@ -21,6 +21,53 @@ require_once 'includes/sidebar.php';
 
     <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
 
+    <div class="row">
+        <div class="col-xl col-md-6 col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="align-items-center row">
+                        <div class="col">
+                            <?php
+                            $stmt = $conn->prepare("SELECT COUNT(*) FROM users");
+                            $totalUser = $stmt->execute();
+                            $totalUser = $stmt->fetch()[0];
+                            ?>
+                            <h6 class="text-uppercase text-muted mb-2">USERS</h6><span class="h2 mb-0"><?= $totalUser ?></span><span class="mt-n1 ms-2 badge bg-success-soft"></span>
+                        </div>
+                        <div class="col-auto"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-dollar-sign text-muted">
+                                <g>
+                                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </g>
+                            </svg></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl col-md-6 col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="align-items-center row">
+                        <div class="col">
+                            <?php
+                            $stmt = $conn->prepare("SELECT COUNT(*) FROM products WHERE name LIKE '%" . $_GET['search'] . "%'");
+                            $totalProducts = $stmt->execute();
+                            $totalProducts = $stmt->fetch()[0];
+                            ?>
+                            <h6 class="text-uppercase text-muted mb-2">Products</h6><span class="h2 mb-0"><?= $totalProducts ?></span>
+                        </div>
+                        <div class="col-auto"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-briefcase text-muted">
+                                <g>
+                                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                                </g>
+                            </svg></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <h2>Section title</h2>
     <div class="table-responsive">
         <table class="table table-striped table-sm">
