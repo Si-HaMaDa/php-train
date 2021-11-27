@@ -4,7 +4,6 @@ class Car
 {
     function __construct($color, $doors, $owner = 0)
     {
-        echo $this->color;
 
         $this->color = $color;
         $this->doors = $doors;
@@ -90,7 +89,7 @@ class Car
         if (strlen($pass) < 6) {
             return 'Pass must be more than 6 digits';
         } else {
-            $this->pass = $pass;
+            $this->pass = sha1($pass);
         }
     }
 }
@@ -102,12 +101,12 @@ class Car
 
 // any();
 
-// $car_one = new Car('Red', '4');
-// $car_one->color = 'red';
+$car_one = new Car('Red', '4');
+$car_one->color = 'red';
 // $car_one->doors = '4';
 
 
-// $car_two = new Car('Blue', '2');
+$car_two = new Car('Blue', '2');
 // $car_two->color = 'blue';
 // $car_two->doors = '2';
 
@@ -119,14 +118,14 @@ $car_three = new Car('Green', '0', 1);
 $car_four = Car::tryStat();
 
 echo '<pre>';
-
+echo $car_one->pass;
 // var_dump($car_four);
 
-// var_dump($car_one);
+var_dump($car_one);
 // var_dump($car_one->open());
 // var_dump($car_one->check());
 
-// var_dump($car_two);
+var_dump($car_two);
 // var_dump($car_two->open());
 // var_dump($car_two->check());
 

@@ -9,21 +9,21 @@ class Fruit
         $this->color = $color;
         $this->intro();
     }
-    final public function intro()
+    final protected function intro()
     {
         echo "The fruit is {$this->name} and the color is {$this->color}.";
     }
 }
 
 // Strawberry is inherited from Fruit
-final class Strawberry extends Fruit
+class Strawberry extends Fruit
 {
     public function message()
     {
         echo "Am I a fruit or a berry? ";
     }
 
-    public function introo()
+    public function intro()
     {
         echo "Second intro";
     }
@@ -34,8 +34,10 @@ final class Strawberry extends Fruit
     }
 }
 
+class mango extends Strawberry {}
+
 $strawberry = new Strawberry("Strawberry", "red");
-$strawberry->message();
+// $strawberry->message();
 echo '<br>';
 // $strawberry->intro();
 $strawberry->newIntro();
