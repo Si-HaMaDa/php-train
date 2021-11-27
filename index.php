@@ -25,7 +25,6 @@
     <link rel="icon" href="https://getbootstrap.com/docs/5.0/assets/img/favicons/favicon.ico">
     <meta name="theme-color" content="#7952b3">
 
-
     <style>
         .bd-placeholder-img {
             font-size: 1.125rem;
@@ -41,8 +40,6 @@
             }
         }
     </style>
-
-
 </head>
 
 <body>
